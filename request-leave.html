@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ขอลา - Leave Management Pro</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="loading-animations.css">
+</head>
+<body>
+  <header class="navbar">
+    <div class="logo">Leave Management Pro</div>
+    <nav class="nav-links">
+      <a href="dashboard.html">🏠 หน้าหลัก</a>
+      <a href="#" id="navLogout">🚪 ออกจากระบบ</a>
+    </nav>
+  </header>
+  
+  <main class="main-content">
+    <section class="card request-leave-form animate-fadein">
+      <h2>📝 แบบฟอร์มขอลา</h2>
+      <form id="leaveRequestForm">
+        <label>📋 ประเภทการลา</label>
+        <select id="leaveType" required>
+          <option value="">เลือกประเภทการลา</option>
+          <option value="LT001">⚡ ลากิจ (6/7 วันคงเหลือ)</option>
+          <option value="LT002">🏥 ลาป่วย (27/30 วันคงเหลือ)</option>
+          <option value="LT003">🏖️ ลาพักร้อน (10/10 วันคงเหลือ)</option>
+          <option value="LT005">📄 ลาอื่นๆ (5/5 วันคงเหลือ)</option>
+        </select>
+
+        <div class="date-section">
+          <div class="date-input">
+            <label>📅 วันที่เริ่มลา</label>
+            <input type="date" id="startDate" required>
+          </div>
+          <div class="date-input">
+            <label>📅 วันที่สิ้นสุดลา</label>
+            <input type="date" id="endDate" required>
+          </div>
+        </div>
+
+        <div class="duration-info">
+          <span id="durationDisplay">จำนวนวัน: 0 วัน</span>
+        </div>
+
+        <label>💬 เหตุผลการลา</label>
+        <textarea id="reason" rows="4" placeholder="กรุณาระบุเหตุผลการลา..." required></textarea>
+
+        <div id="attachmentSection" style="display:none;">
+          <label>📎 แนบเอกสาร (ใบรับรองแพทย์)</label>
+          <input type="file" id="attachment" accept=".pdf,.jpg,.jpeg,.png">
+          <small>รองรับไฟล์: PDF, JPG, PNG (ขนาดไม่เกิน 10MB)</small>
+        </div>
+
+        <div id="warningMessage" class="warning-message" style="display:none;">
+          <!-- ข้อความเตือนจะแสดงที่นี่ -->
+        </div>
+
+        <div class="form-actions">
+          <button type="button" onclick="window.location.href='dashboard.html'" class="btn-secondary">
+            ยกเลิก
+          </button>
+          <button type="submit" id="submitBtn" class="btn-primary">
+            ส่งคำขอ
+          </button>
+        </div>
+      </form>
+    </section>
+
+    <!-- Leave History -->
+    <section class="card leave-history animate-fadein">
+      <h2>📋 คำขอลาล่าสุด</h2>
+      <div id="recentRequests">
+        <!-- จะถูกสร้างด้วย JavaScript -->
+      </div>
+    </section>
+  </main>
+  
+  <script src="script.js"></script>
+</body>
+</html>
