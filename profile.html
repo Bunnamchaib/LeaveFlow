@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>โปรไฟล์ - Leave Management Pro</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="loading-animations.css">
+</head>
+<body>
+  <header class="navbar">
+    <div class="logo">Leave Management Pro</div>
+    <nav class="nav-links">
+      <a href="dashboard.html">🏠 หน้าหลัก</a>
+      <a href="#" id="navLogout">🚪 ออกจากระบบ</a>
+    </nav>
+  </header>
+  
+  <main class="main-content">
+    <section class="card profile-header animate-fadein">
+      <div class="profile-photo-section">
+        <div class="profile-image-container">
+          <img id="profileImage" src="https://via.placeholder.com/120" alt="Profile" class="profile-image">
+          <div class="profile-upload-overlay">
+            <input type="file" id="profileImageInput" accept="image/*" hidden>
+            <button onclick="document.getElementById('profileImageInput').click()" class="btn-upload">
+              📷 เปลี่ยนรูป
+            </button>
+          </div>
+        </div>
+        <div class="profile-info">
+          <h1 id="userName">นายสมชาย ใจดี</h1>
+          <p id="userRole">พนักงาน - แผนก IT</p>
+          <p id="userCode">รหัส: EMP001</p>
+        </div>
+      </div>
+    </section>
+
+    <div class="grid-2col">
+      <section class="card personal-info animate-fadein">
+        <h2>📋 ข้อมูลส่วนตัว</h2>
+        <form id="profileForm">
+          <label>📧 อีเมล</label>
+          <input type="email" id="email" placeholder="example@company.com">
+          
+          <label>📞 เบอร์โทร</label>
+          <input type="tel" id="phone" placeholder="081-234-5678" required>
+          
+          <label>📱 Line ID (ไม่บังคับ)</label>
+          <input type="text" id="lineId" placeholder="your-line-id">
+          
+          <label>🏢 แผนก</label>
+          <input type="text" id="department" readonly>
+          
+          <label>📅 วันเริ่มงาน</label>
+          <input type="date" id="startDate" readonly>
+          
+          <button type="submit" class="btn-primary">💾 บันทึกข้อมูล</button>
+        </form>
+      </section>
+
+      <section class="card leave-summary animate-fadein">
+        <h2>📊 สิทธิ์การลาปีนี้</h2>
+        <div id="leaveSummary">
+          <!-- จะถูกสร้างด้วย JavaScript -->
+        </div>
+        
+        <h3>📈 สถิติการลา</h3>
+        <canvas id="personalLeaveChart"></canvas>
+      </section>
+    </div>
+
+    <section class="card change-password animate-fadein">
+      <h2>🔐 เปลี่ยนรหัสผ่าน</h2>
+      <form id="passwordForm">
+        <label>🔒 รหัสผ่านปัจจุบัน</label>
+        <input type="password" id="currentPassword" required>
+        
+        <label>🔑 รหัสผ่านใหม่</label>
+        <input type="password" id="newPassword" minlength="6" required>
+        
+        <label>✅ ยืนยันรหัสผ่านใหม่</label>
+        <input type="password" id="confirmPassword" required>
+        
+        <button type="submit" class="btn-secondary">🔄 เปลี่ยนรหัสผ่าน</button>
+      </form>
+    </section>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
