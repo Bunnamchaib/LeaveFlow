@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Leave Management Pro - Login</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="background-gradient">
+  <main class="login-container">
+    <section class="login-card card animate-fadein">
+      <header><h1>Leave Management Pro</h1></header>
+      <form id="loginForm">
+        <label for="employeeId">รหัสพนักงาน</label>
+        <input type="text" id="employeeId" name="employeeId" required autofocus placeholder="Employee ID">
+        <label for="password">รหัสผ่าน</label>
+        <input type="password" id="password" name="password" required placeholder="Password">
+        <button type="submit" class="btn-primary">เข้าสู่ระบบ</button>
+      </form>
+      <div id="loginError" class="alert-error" style="display:none;"></div>
+    </section>
+    <footer class="app-footer">© 2025 Leave Management Pro</footer>
+  </main>
+  <script src="script.js"></script>
+</body>
+</html>

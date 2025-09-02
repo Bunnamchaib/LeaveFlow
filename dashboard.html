@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Leave Management Pro - Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="manifest" href="manifest.json">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <header class="navbar">
+    <div class="logo">Leave Management Pro</div>
+    <nav class="nav-links">
+      <a href="#" id="navProfile">โปรไฟล์</a>
+      <a href="#" id="navLogout">ออกจากระบบ</a>
+    </nav>
+  </header>
+  <main class="main-content">
+    <section class="card dashboard-summary animate-fadein" id="summarySection">
+      <!-- สรุปการลาสำหรับพนักงานแต่ละ role (Dynamic Render) -->
+    </section>
+    <section class="dashboard-charts grid-2col">
+      <div class="card">
+        <h2>สถิติการลา (ย้อนหลัง 3 ปี)</h2>
+        <canvas id="leaveHistoryChart"></canvas>
+      </div>
+      <div class="card">
+        <h2>ประเภทการลา</h2>
+        <canvas id="leaveTypeChart"></canvas>
+      </div>
+    </section>
+    <section class="card leave-records animate-fadein">
+      <h2>ประวัติการลา</h2>
+      <table id="leaveTable" class="responsive-table"></table>
+    </section>
+    <section id="notification" class="notification"></section>
+  </main>
+  <footer class="app-footer">© 2025 Leave Management Pro</footer>
+  <script src="script.js"></script>
+</body>
+</html>

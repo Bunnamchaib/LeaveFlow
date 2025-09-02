@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Leave Management Pro - Admin Panel</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="manifest" href="manifest.json">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <header class="navbar">
+    <div class="logo">Admin Panel</div>
+    <nav class="nav-links">
+      <a href="dashboard.html">Dashboard</a>
+      <a href="#" id="navLogout">ออกจากระบบ</a>
+    </nav>
+  </header>
+  <main class="main-content">
+    <section class="card admin-dashboard animate-fadein">
+      <h2>Dashboard องค์กร</h2>
+      <div class="grid-2col">
+        <div>
+          <canvas id="departmentRankingChart"></canvas>
+        </div>
+        <div>
+          <canvas id="organizationHeatmap"></canvas>
+        </div>
+      </div>
+    </section>
+    <section class="card user-management animate-fadein">
+      <h2>จัดการผู้ใช้งาน</h2>
+      <div id="userTable"></div>
+      <button class="btn-primary" id="addUserBtn">เพิ่มผู้ใช้</button>
+    </section>
+    <section class="card leave-rule-management animate-fadein">
+      <h2>ตั้งค่ากฎการลา</h2>
+      <form id="leaveRulesForm"></form>
+    </section>
+    <section class="card export-section animate-fadein">
+      <h2>Export รายงาน</h2>
+      <label>ช่วงเวลา</label><input type="date" id="exportStart"> – <input type="date" id="exportEnd">
+      <label>แผนก</label><select id="exportDepartment"></select>
+      <button class="btn-secondary" id="exportExcelBtn">Export Excel</button>
+      <button class="btn-secondary" id="exportPdfBtn">Export PDF</button>
+    </section>
+    <section id="notification" class="notification"></section>
+  </main>
+  <footer class="app-footer">© 2025 Leave Management Pro</footer>
+  <script src="script.js"></script>
+</body>
+</html>
