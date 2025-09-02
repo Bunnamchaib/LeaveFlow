@@ -4,10 +4,156 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Leave Management Pro - Admin Panel</title>
-  <link rel="stylesheet" href="style.css">
-  <link rel="stylesheet" href="loading-animations.css">
-  <link rel="manifest" href="manifest.json">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    :root {
+      --primary: #4f8cff;
+      --secondary: #f5f7fa;
+      --accent: #38e6c0;
+      --danger: #e05a5a;
+      --success: #3bceac;
+      --warning: #ffd36a;
+      --text: #212a35;
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --shadow: 0 2px 16px 0 rgba(41,61,101,0.08);
+      --radius: 18px;
+    }
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    body {
+      font-family: 'Inter', 'Prompt', -apple-system, BlinkMacSystemFont, sans-serif;
+      color: var(--text);
+      background: var(--bg);
+      line-height: 1.6;
+    }
+    
+    .navbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 3vw;
+      background: var(--primary);
+      color: #fff;
+      box-shadow: var(--shadow);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    
+    .logo {
+      font-weight: bold;
+      font-size: 1.4rem;
+    }
+    
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+    }
+    
+    .nav-links a {
+      color: #fff;
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.2s;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+    }
+    
+    .nav-links a:hover {
+      color: var(--accent);
+      background: rgba(255,255,255,0.1);
+    }
+    
+    .main-content {
+      max-width: 1200px;
+      margin: 2rem auto 0;
+      padding: 0 2rem;
+    }
+    
+    .card {
+      background: var(--card);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 2rem;
+      margin-bottom: 1.5rem;
+      transition: box-shadow 0.2s;
+    }
+    
+    .animate-fadein {
+      animation: fadeIn 0.6s ease-out;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .grid-4col {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    
+    .stat-card {
+      display: flex;
+      align-items: center;
+      padding: 1.5rem;
+      background: white;
+      border-radius: 16px;
+      box-shadow: var(--shadow);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    
+    .stat-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 32px 0 rgba(79,140,255,0.13);
+    }
+    
+    .stat-icon {
+      font-size: 2.5rem;
+      margin-right: 1rem;
+      opacity: 0.8;
+    }
+    
+    .stat-content h3 {
+      font-size: 2rem;
+      font-weight: bold;
+      color: var(--primary);
+      margin: 0;
+    }
+    
+    .stat-content p {
+      color: #666;
+      font-size: 0.9rem;
+      margin: 0;
+    }
+    
+    .app-footer {
+      margin-top: 2rem;
+      padding: 0.8rem;
+      text-align: center;
+      color: #94b0c7;
+      font-size: 0.9rem;
+    }
+    
+    @media (max-width: 768px) {
+      .grid-4col {
+        grid-template-columns: 1fr;
+      }
+      
+      .main-content {
+        padding: 0 1rem;
+      }
+    }
+  </style>
 </head>
 <body>
   <header class="navbar">
@@ -19,32 +165,31 @@
   </header>
   
   <main class="main-content">
-    <!-- Admin Dashboard -->
     <section class="card admin-dashboard animate-fadein">
       <h2>📊 Dashboard องค์กร</h2>
       <div class="admin-stats grid-4col">
-        <div class="stat-card" onclick="showEmployeeList()">
+        <div class="stat-card">
           <div class="stat-icon">👥</div>
           <div class="stat-content">
             <h3 id="totalEmployees">25</h3>
             <p>พนักงานทั้งหมด</p>
           </div>
         </div>
-        <div class="stat-card" onclick="showTodayRequests()">
+        <div class="stat-card">
           <div class="stat-icon">📅</div>
           <div class="stat-content">
             <h3 id="todayRequests">3</h3>
             <p>คำขอวันนี้</p>
           </div>
         </div>
-        <div class="stat-card" onclick="showPendingCertificates()">
+        <div class="stat-card">
           <div class="stat-icon">⏰</div>
           <div class="stat-content">
             <h3 id="pendingCerts">2</h3>
             <p>รอใบรับรอง</p>
           </div>
         </div>
-        <div class="stat-card" onclick="showMonthlyTrend()">
+        <div class="stat-card">
           <div class="stat-icon">📈</div>
           <div class="stat-content">
             <h3 id="monthlyTrend">↑15%</h3>
@@ -54,89 +199,46 @@
       </div>
     </section>
 
-    <!-- Charts -->
-    <section class="dashboard-charts grid-2col">
-      <div class="card">
-        <h2>📊 อันดับแผนกที่ลามากที่สุด</h2>
-        <canvas id="departmentRankingChart"></canvas>
-      </div>
-      <div class="card">
-        <h2>🗓️ Heatmap การลา</h2>
-        <canvas id="organizationHeatmap"></canvas>
-      </div>
-    </section>
-
-    <!-- Management Sections -->
-    <section class="card user-management animate-fadein">
-      <h2>👥 จัดการพนักงาน</h2>
-      <div class="management-actions">
-        <button class="btn-primary" onclick="showAddUserForm()">➕ เพิ่มพนักงาน</button>
-        <button class="btn-secondary" onclick="showUserList()">📋 รายชื่อทั้งหมด</button>
-        <button class="btn-secondary" onclick="importUsers()">📤 Import CSV</button>
-      </div>
-      <div id="userManagementContent">
-        <!-- Dynamic content -->
+    <section class="card animate-fadein">
+      <h2>📋 รายการจัดการ</h2>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
+        <button onclick="alert('ฟีเจอร์กำลังพัฒนา')" style="padding: 1rem; background: var(--primary); color: white; border: none; border-radius: 8px; cursor: pointer;">
+          👥 จัดการพนักงาน
+        </button>
+        <button onclick="alert('ฟีเจอร์กำลังพัฒนา')" style="padding: 1rem; background: var(--accent); color: white; border: none; border-radius: 8px; cursor: pointer;">
+          📋 ตั้งค่ากฎการลา
+        </button>
+        <button onclick="alert('ฟีเจอร์กำลังพัฒนา')" style="padding: 1rem; background: var(--warning); color: white; border: none; border-radius: 8px; cursor: pointer;">
+          📊 รายงานองค์กร
+        </button>
+        <button onclick="alert('ฟีเจอร์กำลังพัฒนา')" style="padding: 1rem; background: var(--success); color: white; border: none; border-radius: 8px; cursor: pointer;">
+          💾 Export ข้อมูล
+        </button>
       </div>
     </section>
-
-    <section class="card leave-rule-management animate-fadein">
-      <h2>📋 ตั้งค่ากฎการลา</h2>
-      <form id="leaveRulesForm">
-        <div class="rules-grid">
-          <div class="rule-section">
-            <h3>⚡ ลากิจ</h3>
-            <label>วันต่อปี</label>
-            <input type="number" id="casualDays" value="7">
-            <label>แจ้งล่วงหน้า (วัน)</label>
-            <input type="number" id="casualAdvance" value="1">
-          </div>
-          <div class="rule-section">
-            <h3>🏥 ลาป่วย</h3>
-            <label>วันต่อปี</label>
-            <input type="number" id="sickDays" value="30">
-            <label>ใบรับรองเมื่อเกิน (วัน)</label>
-            <input type="number" id="sickCertDays" value="3">
-          </div>
-          <div class="rule-section">
-            <h3>🏖️ ลาพักร้อน</h3>
-            <label>วันต่อปี</label>
-            <input type="number" id="vacationDays" value="10">
-            <label>แจ้งล่วงหน้า (วัน)</label>
-            <input type="number" id="vacationAdvance" value="7">
-          </div>
-        </div>
-        <button type="submit" class="btn-primary">💾 บันทึกกฎ</button>
-      </form>
-    </section>
-
-    <section class="card export-section animate-fadein">
-      <h2>💾 Export รายงาน</h2>
-      <div class="export-controls">
-        <label>📅 ช่วงเวลา</label>
-        <div class="date-range">
-          <input type="date" id="exportStart">
-          <span>ถึง</span>
-          <input type="date" id="exportEnd">
-        </div>
-        <label>🏢 แผนก</label>
-        <select id="exportDepartment">
-          <option value="">ทั้งหมด</option>
-          <option value="IT">IT</option>
-          <option value="HR">HR</option>
-          <option value="Finance">Finance</option>
-          <option value="Marketing">Marketing</option>
-        </select>
-        <div class="export-buttons">
-          <button class="btn-secondary" id="exportExcelBtn">📊 Export Excel</button>
-          <button class="btn-secondary" id="exportPdfBtn">📄 Export PDF</button>
-        </div>
-      </div>
-    </section>
-
-    <section id="notification" class="notification" style="display:none;"></section>
   </main>
   
   <footer class="app-footer">© 2025 Leave Management Pro</footer>
-  <script src="script.js"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const user = JSON.parse(localStorage.getItem('user') || '{}');
+      
+      if (user.role !== 'admin') {
+        window.location.href = 'dashboard.html';
+        return;
+      }
+
+      const logoutBtn = document.getElementById('navLogout');
+      if (logoutBtn) {
+        logoutBtn.addEventListener('click', logout);
+      }
+    });
+
+    function logout() {
+      localStorage.clear();
+      window.location.href = 'index.html';
+    }
+  </script>
 </body>
 </html>
