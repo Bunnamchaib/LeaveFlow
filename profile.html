@@ -4,8 +4,301 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>โปรไฟล์ - Leave Management Pro</title>
-  <link rel="stylesheet" href="style.css">
-  <link rel="stylesheet" href="loading-animations.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    :root {
+      --primary: #4f8cff;
+      --secondary: #f5f7fa;
+      --accent: #38e6c0;
+      --danger: #e05a5a;
+      --success: #3bceac;
+      --warning: #ffd36a;
+      --text: #212a35;
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --shadow: 0 2px 16px 0 rgba(41,61,101,0.08);
+      --radius: 18px;
+    }
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    body {
+      font-family: 'Inter', 'Prompt', -apple-system, BlinkMacSystemFont, sans-serif;
+      color: var(--text);
+      background: var(--bg);
+      line-height: 1.6;
+    }
+    
+    .navbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 3vw;
+      background: var(--primary);
+      color: #fff;
+      box-shadow: var(--shadow);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    
+    .logo {
+      font-weight: bold;
+      font-size: 1.4rem;
+    }
+    
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+    }
+    
+    .nav-links a {
+      color: #fff;
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.2s;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+    }
+    
+    .nav-links a:hover {
+      color: var(--accent);
+      background: rgba(255,255,255,0.1);
+    }
+    
+    .main-content {
+      max-width: 1200px;
+      margin: 2rem auto 0;
+      padding: 0 2rem;
+    }
+    
+    .card {
+      background: var(--card);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 2rem;
+      margin-bottom: 1.5rem;
+      transition: box-shadow 0.2s;
+    }
+    
+    .animate-fadein {
+      animation: fadeIn 0.6s ease-out;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .profile-header {
+      text-align: center;
+    }
+    
+    .profile-photo-section {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    
+    .profile-image-container {
+      position: relative;
+      flex-shrink: 0;
+    }
+    
+    .profile-image {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 4px solid var(--primary);
+      box-shadow: var(--shadow);
+    }
+    
+    .profile-upload-overlay {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+    }
+    
+    .btn-upload {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    
+    .btn-upload:hover {
+      background: #3b66c6;
+      transform: translateY(-2px);
+    }
+    
+    .profile-info {
+      text-align: left;
+      flex-grow: 1;
+    }
+    
+    .profile-info h1 {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+      color: var(--text);
+    }
+    
+    .profile-info p {
+      color: #666;
+      margin-bottom: 0.3rem;
+    }
+    
+    .grid-2col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+    
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+    
+    label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: var(--text);
+      font-size: 0.95rem;
+    }
+    
+    input, textarea, select {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      font-size: 1rem;
+      border: 2px solid var(--secondary);
+      border-radius: 12px;
+      background: var(--secondary);
+      transition: all 0.2s;
+      font-family: inherit;
+    }
+    
+    input:focus, textarea:focus, select:focus {
+      outline: none;
+      border-color: var(--primary);
+      background: #e9eeff;
+      transform: translateY(-1px);
+    }
+    
+    input[readonly] {
+      background: #f0f0f0;
+      color: #666;
+    }
+    
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: inherit;
+    }
+    
+    .btn-primary:hover {
+      background: #3b66c6;
+      transform: translateY(-2px);
+    }
+    
+    .btn-secondary {
+      background: var(--accent);
+      color: #17343b;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: inherit;
+    }
+    
+    .btn-secondary:hover {
+      background: #29c8a1;
+      transform: translateY(-2px);
+    }
+    
+    .leave-quota {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    
+    .quota-item {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    
+    .quota-type {
+      flex: 0 0 120px;
+      font-weight: 600;
+    }
+    
+    .quota-used {
+      flex: 0 0 80px;
+      text-align: right;
+      font-weight: 600;
+      color: var(--primary);
+    }
+    
+    .quota-bar {
+      flex: 1;
+      height: 8px;
+      background: var(--secondary);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    
+    .quota-progress {
+      height: 100%;
+      background: linear-gradient(90deg, var(--primary), var(--accent));
+      border-radius: 4px;
+      transition: width 0.3s ease;
+    }
+    
+    .app-footer {
+      margin-top: 2rem;
+      padding: 0.8rem;
+      text-align: center;
+      color: #94b0c7;
+      font-size: 0.9rem;
+    }
+    
+    @media (max-width: 768px) {
+      .main-content {
+        padding: 0 1rem;
+      }
+      
+      .grid-2col {
+        grid-template-columns: 1fr;
+      }
+      
+      .profile-photo-section {
+        flex-direction: column;
+        text-align: center;
+      }
+      
+      .profile-info {
+        text-align: center;
+      }
+    }
+  </style>
 </head>
 <body>
   <header class="navbar">
@@ -40,20 +333,30 @@
       <section class="card personal-info animate-fadein">
         <h2>📋 ข้อมูลส่วนตัว</h2>
         <form id="profileForm">
-          <label>📧 อีเมล</label>
-          <input type="email" id="email" placeholder="example@company.com">
+          <div class="form-group">
+            <label>📧 อีเมล</label>
+            <input type="email" id="email" placeholder="example@company.com">
+          </div>
           
-          <label>📞 เบอร์โทร</label>
-          <input type="tel" id="phone" placeholder="081-234-5678" required>
+          <div class="form-group">
+            <label>📞 เบอร์โทร</label>
+            <input type="tel" id="phone" placeholder="081-234-5678" required>
+          </div>
           
-          <label>📱 Line ID (ไม่บังคับ)</label>
-          <input type="text" id="lineId" placeholder="your-line-id">
+          <div class="form-group">
+            <label>📱 Line ID (ไม่บังคับ)</label>
+            <input type="text" id="lineId" placeholder="your-line-id">
+          </div>
           
-          <label>🏢 แผนก</label>
-          <input type="text" id="department" readonly>
+          <div class="form-group">
+            <label>🏢 แผนก</label>
+            <input type="text" id="department" readonly>
+          </div>
           
-          <label>📅 วันเริ่มงาน</label>
-          <input type="date" id="startDate" readonly>
+          <div class="form-group">
+            <label>📅 วันเริ่มงาน</label>
+            <input type="date" id="startDate" readonly>
+          </div>
           
           <button type="submit" class="btn-primary">💾 บันทึกข้อมูล</button>
         </form>
@@ -95,21 +398,227 @@
     <section class="card change-password animate-fadein">
       <h2>🔐 เปลี่ยนรหัสผ่าน</h2>
       <form id="passwordForm">
-        <label>🔒 รหัสผ่านปัจจุบัน</label>
-        <input type="password" id="currentPassword" required>
+        <div class="grid-2col">
+          <div class="form-group">
+            <label>🔒 รหัสผ่านปัจจุบัน</label>
+            <input type="password" id="currentPassword" required>
+          </div>
+          
+          <div class="form-group">
+            <label>🔑 รหัสผ่านใหม่</label>
+            <input type="password" id="newPassword" minlength="6" required>
+          </div>
+        </div>
         
-        <label>🔑 รหัสผ่านใหม่</label>
-        <input type="password" id="newPassword" minlength="6" required>
-        
-        <label>✅ ยืนยันรหัสผ่านใหม่</label>
-        <input type="password" id="confirmPassword" required>
+        <div class="form-group">
+          <label>✅ ยืนยันรหัสผ่านใหม่</label>
+          <input type="password" id="confirmPassword" required>
+        </div>
         
         <button type="submit" class="btn-secondary">🔄 เปลี่ยนรหัสผ่าน</button>
       </form>
     </section>
   </main>
 
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="script.js"></script>
+  <footer class="app-footer">© 2025 Leave Management Pro</footer>
+
+  <script>
+    const API_URL = "https://script.google.com/macros/s/YOUR_DEPLOYMENT_URL/exec";
+
+    document.addEventListener('DOMContentLoaded', function() {
+      const user = JSON.parse(localStorage.getItem('user') || '{}');
+      
+      if (!user.employeeId) {
+        window.location.href = 'index.html';
+        return;
+      }
+
+      const logoutBtn = document.getElementById('navLogout');
+      if (logoutBtn) {
+        logoutBtn.addEventListener('click', logout);
+      }
+
+      loadProfile();
+      renderPersonalChart();
+
+      // Form submissions
+      document.getElementById('profileForm').addEventListener('submit', handleProfileUpdate);
+      document.getElementById('passwordForm').addEventListener('submit', handlePasswordChange);
+      document.getElementById('profileImageInput').addEventListener('change', handleImageUpload);
+    });
+
+    async function loadProfile() {
+      const user = JSON.parse(localStorage.getItem('user') || '{}');
+      
+      // แสดงข้อมูลพื้นฐานจาก localStorage
+      updateProfileDisplay(user);
+      
+      try {
+        const response = await fetch(`${API_URL}?action=getProfile&employeeId=${user.employeeId}`);
+        const data = await response.json();
+        
+        if (data.success) {
+          updateProfileForm(data.profile);
+          updateLeaveQuota(data.leaveStats);
+        }
+      } catch (error) {
+        console.error('Profile load error:', error);
+      }
+    }
+
+    function updateProfileDisplay(user) {
+      document.getElementById('userName').textContent = user.fullName || 'ผู้ใช้';
+      document.getElementById('userRole').textContent = `${user.role || 'พนักงาน'} - แผนก ${user.department || 'ไม่ระบุ'}`;
+      document.getElementById('userCode').textContent = `รหัส: ${user.employeeId || 'N/A'}`;
+      
+      if (user.profileImageURL) {
+        document.getElementById('profileImage').src = user.profileImageURL;
+      }
+    }
+
+    function updateProfileForm(profile) {
+      if (!profile) return;
+      
+      const fields = ['email', 'phone', 'lineId', 'department', 'startDate'];
+      fields.forEach(field => {
+        const element = document.getElementById(field);
+        if (element && profile[field]) {
+          element.value = profile[field];
+        }
+      });
+    }
+
+    function updateLeaveQuota(leaveStats) {
+      if (!leaveStats) return;
+      
+      // อัปเดตแถบสถิติการลา
+      const quotaItems = document.querySelectorAll('.quota-item');
+      if (quotaItems.length >= 3) {
+        // ลากิจ
+        quotaItems[0].querySelector('.quota-used').textContent = `${leaveStats.casual?.used || 1}/${leaveStats.casual?.total || 7} วัน`;
+        quotaItems[0].querySelector('.quota-progress').style.width = `${((leaveStats.casual?.used || 1) / (leaveStats.casual?.total || 7)) * 100}%`;
+        
+        // ลาป่วย
+        quotaItems[1].querySelector('.quota-used').textContent = `${leaveStats.sick?.used || 3}/${leaveStats.sick?.total || 30} วัน`;
+        quotaItems[1].querySelector('.quota-progress').style.width = `${((leaveStats.sick?.used || 3) / (leaveStats.sick?.total || 30)) * 100}%`;
+        
+        // ลาพักร้อน
+        quotaItems[2].querySelector('.quota-used').textContent = `${leaveStats.vacation?.used || 0}/${leaveStats.vacation?.total || 10} วัน`;
+        quotaItems[2].querySelector('.quota-progress').style.width = `${((leaveStats.vacation?.used || 0) / (leaveStats.vacation?.total || 10)) * 100}%`;
+      }
+    }
+
+    function renderPersonalChart() {
+      const canvas = document.getElementById('personalLeaveChart');
+      if (canvas) {
+        new Chart(canvas, {
+          type: 'bar',
+          data: {
+            labels: ['ลากิจ', 'ลาป่วย', 'ลาพักร้อน'],
+            datasets: [{
+              label: 'วันที่ใช้แล้ว',
+              data: [1, 3, 0],
+              backgroundColor: ['#4f8cff', '#e05a5a', '#38e6c0']
+            }]
+          },
+          options: {
+            responsive: true,
+            plugins: {
+              legend: { display: false }
+            },
+            scales: {
+              y: { beginAtZero: true }
+            }
+          }
+        });
+      }
+    }
+
+    async function handleProfileUpdate(e) {
+      e.preventDefault();
+      
+      const user = JSON.parse(localStorage.getItem('user') || '{}');
+      const formData = {
+        employeeId: user.employeeId,
+        email: document.getElementById('email').value,
+        phone: document.getElementById('phone').value,
+        lineId: document.getElementById('lineId').value
+      };
+      
+      try {
+        const response = await fetch(`${API_URL}?action=updateProfile&${new URLSearchParams(formData)}`);
+        const result = await response.json();
+        
+        if (result.success) {
+          alert('อัปเดตโปรไฟล์สำเร็จ');
+        } else {
+          alert('ไม่สามารถอัปเดตโปรไฟล์ได้');
+        }
+      } catch (error) {
+        console.error('Profile update error:', error);
+        alert('เกิดข้อผิดพลาด');
+      }
+    }
+
+    async function handlePasswordChange(e) {
+      e.preventDefault();
+      
+      const currentPassword = document.getElementById('currentPassword').value;
+      const newPassword = document.getElementById('newPassword').value;
+      const confirmPassword = document.getElementById('confirmPassword').value;
+      
+      if (newPassword !== confirmPassword) {
+        alert('รหัสผ่านใหม่และการยืนยันไม่ตรงกัน');
+        return;
+      }
+      
+      if (newPassword.length < 6) {
+        alert('รหัสผ่านต้องมีความยาวอย่างน้อย 6 ตัวอักษร');
+        return;
+      }
+      
+      const user = JSON.parse(localStorage.getItem('user') || '{}');
+      const params = {
+        employeeId: user.employeeId,
+        currentPassword: currentPassword,
+        newPassword: newPassword
+      };
+      
+      try {
+        const response = await fetch(`${API_URL}?action=changePassword&${new URLSearchParams(params)}`);
+        const result = await response.json();
+        
+        if (result.success) {
+          alert('เปลี่ยนรหัสผ่านสำเร็จ');
+          document.getElementById('passwordForm').reset();
+        } else {
+          alert(result.message || 'ไม่สามารถเปลี่ยนรหัสผ่านได้');
+        }
+      } catch (error) {
+        console.error('Password change error:', error);
+        alert('เกิดข้อผิดพลาด');
+      }
+    }
+
+    function handleImageUpload(e) {
+      const file = e.target.files[0];
+      if (file) {
+        // สำหรับการทดสอบ - แสดงรูปที่อัปโหลด
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          document.getElementById('profileImage').src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+        
+        // ในการใช้งานจริง ควรอัปโหลดไปยัง Google Drive หรือ Cloud Storage
+        alert('ฟีเจอร์อัปโหลดรูปกำลังพัฒนา');
+      }
+    }
+
+    function logout() {
+      localStorage.clear();
+      window.location.href = 'index.html';
+    }
+  </script>
 </body>
 </html>
