@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Leave Management Pro - Dashboard</title>
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="loading-animations.css">
   <link rel="manifest" href="manifest.json">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
@@ -12,30 +13,97 @@
   <header class="navbar">
     <div class="logo">Leave Management Pro</div>
     <nav class="nav-links">
-      <a href="#" id="navProfile">โปรไฟล์</a>
-      <a href="#" id="navLogout">ออกจากระบบ</a>
+      <a href="profile.html" id="navProfile">👤 โปรไฟล์</a>
+      <a href="#" id="navLogout">🚪 ออกจากระบบ</a>
     </nav>
   </header>
+  
   <main class="main-content">
-    <section class="card dashboard-summary animate-fadein" id="summarySection">
-      <!-- สรุปการลาสำหรับพนักงานแต่ละ role (Dynamic Render) -->
+    <!-- Summary Cards -->
+    <section class="dashboard-summary animate-fadein" id="summarySection">
+      <div class="summary-cards grid-4col">
+        <div class="card summary-card">
+          <div class="card-icon">⚡</div>
+          <div class="card-content">
+            <h3>ลากิจ</h3>
+            <p class="card-number" id="casualLeave">6/7</p>
+            <small>วันคงเหลือ</small>
+          </div>
+        </div>
+        <div class="card summary-card">
+          <div class="card-icon">🏥</div>
+          <div class="card-content">
+            <h3>ลาป่วย</h3>
+            <p class="card-number" id="sickLeave">27/30</p>
+            <small>วันคงเหลือ</small>
+          </div>
+        </div>
+        <div class="card summary-card">
+          <div class="card-icon">🏖️</div>
+          <div class="card-content">
+            <h3>ลาพักร้อน</h3>
+            <p class="card-number" id="vacationLeave">10/10</p>
+            <small>วันคงเหลือ</small>
+          </div>
+        </div>
+        <div class="card summary-card">
+          <div class="card-icon">📋</div>
+          <div class="card-content">
+            <h3>คำขอรอพิจารณา</h3>
+            <p class="card-number" id="pendingRequests">1</p>
+            <small>รายการ</small>
+          </div>
+        </div>
+      </div>
     </section>
+
+    <!-- Quick Actions -->  
+    <section class="card quick-actions animate-fadein">
+      <h2>🎯 การกระทำด่วน</h2>
+      <div class="action-buttons">
+        <button class="action-btn" onclick="window.location.href='request-leave.html'">
+          ➕ ขอลาใหม่
+        </button>
+        <button class="action-btn" onclick="showLeaveStatus()">
+          📋 ดูสถานะคำขอ
+        </button>
+        <button class="action-btn" onclick="window.location.href='profile.html'">
+          👤 จัดการโปรไฟล์
+        </button>
+      </div>
+    </section>
+
+    <!-- Charts -->
     <section class="dashboard-charts grid-2col">
       <div class="card">
-        <h2>สถิติการลา (ย้อนหลัง 3 ปี)</h2>
+        <h2>📈 สถิติการลา (ย้อนหลัง 3 ปี)</h2>
         <canvas id="leaveHistoryChart"></canvas>
       </div>
       <div class="card">
-        <h2>ประเภทการลา</h2>
+        <h2>📊 ประเภทการลา</h2>
         <canvas id="leaveTypeChart"></canvas>
       </div>
     </section>
+
+    <!-- Recent Leave Records -->
     <section class="card leave-records animate-fadein">
-      <h2>ประวัติการลา</h2>
-      <table id="leaveTable" class="responsive-table"></table>
+      <h2>📅 ประวัติการลาล่าสุด</h2>
+      <div id="recentLeaves">
+        <!-- จะถูกสร้างด้วย JavaScript -->
+      </div>
     </section>
-    <section id="notification" class="notification"></section>
+
+    <!-- Head/Admin Panel (แสดงตาม Role) -->
+    <section id="headPanel" class="card head-panel" style="display:none;">
+      <h2>👨‍💼 งานสำหรับหัวหน้า</h2>
+      <div id="pendingApprovals">
+        <!-- รายการรออนุมัติ -->
+      </div>
+    </section>
+
+    <section id="notification" class="notification" style="display:none;"></section>
   </main>
+  
   <footer class="app-footer">© 2025 Leave Management Pro</footer>
   <script src="script.js"></script>
 </body>
