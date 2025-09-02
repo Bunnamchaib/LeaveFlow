@@ -1,6 +1,6 @@
 // Performance & Loading Configuration
 const CONFIG = {
-  API_URL: "https://script.google.com/macros/s/AKfycbynlmDPlMcpRSfSoAL_mde0fkLA5iP2oEBrYsyzOutEDT0PoYgIIhVJzTZ145imNosrUQ/exec", // แทนที่ด้วย URL จริง
+  API_URL: "https://script.google.com/macros/s/AKfycbzeJUBkDWV6CAMHnlkPzycrI6tydLEtc88enoNhxj51sFXoL4AbGXQW0qJ3-yVuCH-onA/exec", // แทนที่ด้วย URL จริง
   LOADING_TIMEOUT: 10000, // 10 seconds max loading
   CACHE_DURATION: 5 * 60 * 1000, // 5 minutes cache
   RETRY_ATTEMPTS: 3
