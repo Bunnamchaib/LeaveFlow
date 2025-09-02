@@ -5,7 +5,20 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Leave Management Pro - Login</title>
   <style>
-    /* Emergency Inline CSS - รวมทุกอย่าง */
+    :root {
+      --primary: #4f8cff;
+      --secondary: #f5f7fa;
+      --accent: #38e6c0;
+      --danger: #e05a5a;
+      --success: #3bceac;
+      --warning: #ffd36a;
+      --text: #212a35;
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --shadow: 0 2px 16px 0 rgba(41,61,101,0.08);
+      --radius: 18px;
+    }
+    
     * {
       box-sizing: border-box;
       margin: 0;
@@ -39,7 +52,7 @@
     
     h1 {
       font-size: 2.2rem;
-      color: #4f8cff;
+      color: var(--primary);
       margin-bottom: 2rem;
       font-weight: 800;
     }
@@ -70,7 +83,7 @@
     
     input:focus {
       outline: none;
-      border-color: #4f8cff;
+      border-color: var(--primary);
       background: #e9eeff;
       transform: translateY(-2px);
       box-shadow: 0 4px 15px rgba(79, 140, 255, 0.2);
@@ -81,7 +94,7 @@
       padding: 1rem;
       font-size: 1.1rem;
       font-weight: 600;
-      background: linear-gradient(45deg, #4f8cff, #38e6c0);
+      background: linear-gradient(45deg, var(--primary), var(--accent));
       color: white;
       border: none;
       border-radius: 12px;
@@ -103,7 +116,7 @@
     }
     
     .error {
-      background: #e74c3c;
+      background: var(--danger);
       color: white;
       padding: 1rem;
       border-radius: 8px;
@@ -118,7 +131,6 @@
       font-size: 0.9rem;
     }
     
-    /* Demo Credentials Box */
     .demo-creds {
       background: #e8f4f8;
       padding: 1rem;
@@ -129,7 +141,7 @@
     }
     
     .demo-creds h4 {
-      color: #4f8cff;
+      color: var(--primary);
       margin-bottom: 0.5rem;
     }
     
@@ -138,7 +150,6 @@
       font-family: monospace;
     }
     
-    /* Loading Animation */
     .loading-overlay {
       position: fixed;
       top: 0;
@@ -160,7 +171,7 @@
     .logo-pulse {
       width: 100px;
       height: 100px;
-      background: linear-gradient(45deg, #4f8cff, #38e6c0);
+      background: linear-gradient(45deg, var(--primary), var(--accent));
       border-radius: 50%;
       display: flex;
       align-items: center;
@@ -192,7 +203,7 @@
     
     .progress {
       height: 100%;
-      background: linear-gradient(90deg, #4f8cff, #38e6c0);
+      background: linear-gradient(90deg, var(--primary), var(--accent));
       animation: loading 2s infinite;
     }
     
@@ -202,7 +213,6 @@
       100% { width: 100%; }
     }
 
-    /* Responsive */
     @media (max-width: 480px) {
       .login-container {
         padding: 2rem 1.5rem;
@@ -235,9 +245,8 @@
     
     <div id="loginError" class="error"></div>
     
-    <!-- Demo Credentials -->
     <div class="demo-creds">
-      <h4>🔑 ทดสอบระบบ:</h4>
+      <h4>🔑 ข้อมูลเข้าระบบ:</h4>
       <p><strong>พนักงาน:</strong> EMP001 / password123</p>
       <p><strong>หัวหน้า:</strong> EMP002 / password456</p>
       <p><strong>แอดมิน:</strong> EMP003 / admin789</p>
@@ -246,7 +255,6 @@
     <div class="footer">© 2025 Leave Management Pro</div>
   </div>
   
-  <!-- Loading Overlay -->
   <div id="loadingOverlay" class="loading-overlay">
     <div class="loading-content">
       <div class="logo-pulse">🏢</div>
@@ -258,7 +266,9 @@
   </div>
 
   <script>
-    // Emergency Inline JavaScript
+    // แก้ไข API_URL ให้ตรงกับ Google Apps Script URL ที่ Deploy แล้ว
+    const API_URL = "https://script.google.com/macros/s/YOUR_DEPLOYMENT_URL/exec";
+
     document.addEventListener('DOMContentLoaded', function() {
       const loginForm = document.getElementById('loginForm');
       const employeeIdInput = document.getElementById('employeeId');
@@ -267,77 +277,62 @@
       const errorDiv = document.getElementById('loginError');
       const loadingOverlay = document.getElementById('loadingOverlay');
       
-      // Auto-focus first input
       employeeIdInput.focus();
       
-      // Login form submit
       loginForm.addEventListener('submit', async function(e) {
         e.preventDefault();
         
         const employeeId = employeeIdInput.value.trim();
         const password = passwordInput.value;
         
-        // Clear previous errors
         errorDiv.style.display = 'none';
         
-        // Validation
         if (!employeeId || !password) {
           showError('กรุณาใส่รหัสพนักงานและรหัสผ่าน');
           return;
         }
         
-        // Show loading
         showLoading();
         loginBtn.disabled = true;
         
         try {
-          // Simulate API delay
-          await delay(2000);
+          const url = `${API_URL}?action=login&employeeId=${encodeURIComponent(employeeId)}&password=${encodeURIComponent(password)}`;
+          const response = await Promise.race([
+            fetch(url),
+            new Promise((_, reject) => setTimeout(() => reject(new Error('หมดเวลาการเชื่อมต่อ')), 10000))
+          ]);
           
-          // Demo credentials
-          const validCredentials = {
-            'EMP001': { password: 'password123', name: 'นายสมชาย ใจดี', role: 'staff', dept: 'IT' },
-            'EMP002': { password: 'password456', name: 'นางสาวสุดา สวยงาม', role: 'head', dept: 'HR' },
-            'EMP003': { password: 'admin789', name: 'นายอดมิน ระบบ', role: 'admin', dept: 'IT' }
-          };
+          if (!response.ok) {
+            throw new Error('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้');
+          }
           
-          if (validCredentials[employeeId] && validCredentials[employeeId].password === password) {
-            const user = validCredentials[employeeId];
+          const result = await response.json();
+          
+          if (result.success) {
+            localStorage.setItem('user', JSON.stringify(result.user));
+            localStorage.setItem('loginTime', new Date().toISOString());
             
-            // Store user data
-            const userData = {
-              employeeId: employeeId,
-              fullName: user.name,
-              role: user.role,
-              department: user.dept,
-              loginTime: new Date().toISOString()
-            };
-            
-            localStorage.setItem('user', JSON.stringify(userData));
-            
-            // Show success
             updateLoadingText('✅ เข้าสู่ระบบสำเร็จ!');
             await delay(1000);
             
-            // Redirect based on role
-            if (user.role === 'admin') {
+            if (result.user.role === 'admin') {
               window.location.href = 'admin.html';
             } else {
               window.location.href = 'dashboard.html';
             }
             
           } else {
-            throw new Error('รหัสพนักงานหรือรหัสผ่านไม่ถูกต้อง');
+            throw new Error(result.message || 'รหัสพนักงานหรือรหัสผ่านไม่ถูกต้อง');
           }
           
         } catch (error) {
+          console.error('Login error:', error);
           hideLoading();
-          showError(error.message);
+          showError(error.message || 'เกิดข้อผิดพลาดในการเข้าสู่ระบบ');
           loginBtn.disabled = false;
         }
       });
       
-      // Helper functions
       function showLoading() {
         loadingOverlay.style.display = 'flex';
       }
@@ -348,50 +343,20 @@
       
       function updateLoadingText(text) {
         const loadingText = document.querySelector('.loading-text');
-        if (loadingText) {
-          loadingText.textContent = text;
-        }
+        if (loadingText) loadingText.textContent = text;
       }
       
       function showError(message) {
         errorDiv.textContent = message;
         errorDiv.style.display = 'block';
-        
-        // Shake animation
-        errorDiv.style.animation = 'none';
-        errorDiv.offsetHeight; // Trigger reflow
         errorDiv.style.animation = 'shake 0.5s ease-in-out';
       }
       
       function delay(ms) {
         return new Promise(resolve => setTimeout(resolve, ms));
       }
-      
-      // Quick fill buttons (for testing)
-      document.addEventListener('keydown', function(e) {
-        if (e.ctrlKey || e.metaKey) {
-          switch(e.key) {
-            case '1':
-              e.preventDefault();
-              employeeIdInput.value = 'EMP001';
-              passwordInput.value = 'password123';
-              break;
-            case '2':
-              e.preventDefault();
-              employeeIdInput.value = 'EMP002';
-              passwordInput.value = 'password456';
-              break;
-            case '3':
-              e.preventDefault();
-              employeeIdInput.value = 'EMP003';
-              passwordInput.value = 'admin789';
-              break;
-          }
-        }
-      });
     });
     
-    // Add shake animation
     const style = document.createElement('style');
     style.textContent = `
       @keyframes shake {
