@@ -5,47 +5,137 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Leave Management Pro - Admin Panel</title>
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="loading-animations.css">
   <link rel="manifest" href="manifest.json">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
   <header class="navbar">
-    <div class="logo">Admin Panel</div>
+    <div class="logo">⚙️ Admin Panel</div>
     <nav class="nav-links">
-      <a href="dashboard.html">Dashboard</a>
-      <a href="#" id="navLogout">ออกจากระบบ</a>
+      <a href="dashboard.html">🏠 Dashboard</a>
+      <a href="#" id="navLogout">🚪 ออกจากระบบ</a>
     </nav>
   </header>
+  
   <main class="main-content">
+    <!-- Admin Dashboard -->
     <section class="card admin-dashboard animate-fadein">
-      <h2>Dashboard องค์กร</h2>
-      <div class="grid-2col">
-        <div>
-          <canvas id="departmentRankingChart"></canvas>
+      <h2>📊 Dashboard องค์กร</h2>
+      <div class="admin-stats grid-4col">
+        <div class="stat-card" onclick="showEmployeeList()">
+          <div class="stat-icon">👥</div>
+          <div class="stat-content">
+            <h3 id="totalEmployees">25</h3>
+            <p>พนักงานทั้งหมด</p>
+          </div>
         </div>
-        <div>
-          <canvas id="organizationHeatmap"></canvas>
+        <div class="stat-card" onclick="showTodayRequests()">
+          <div class="stat-icon">📅</div>
+          <div class="stat-content">
+            <h3 id="todayRequests">3</h3>
+            <p>คำขอวันนี้</p>
+          </div>
+        </div>
+        <div class="stat-card" onclick="showPendingCertificates()">
+          <div class="stat-icon">⏰</div>
+          <div class="stat-content">
+            <h3 id="pendingCerts">2</h3>
+            <p>รอใบรับรอง</p>
+          </div>
+        </div>
+        <div class="stat-card" onclick="showMonthlyTrend()">
+          <div class="stat-icon">📈</div>
+          <div class="stat-content">
+            <h3 id="monthlyTrend">↑15%</h3>
+            <p>การลาเดือนนี้</p>
+          </div>
         </div>
       </div>
     </section>
+
+    <!-- Charts -->
+    <section class="dashboard-charts grid-2col">
+      <div class="card">
+        <h2>📊 อันดับแผนกที่ลามากที่สุด</h2>
+        <canvas id="departmentRankingChart"></canvas>
+      </div>
+      <div class="card">
+        <h2>🗓️ Heatmap การลา</h2>
+        <canvas id="organizationHeatmap"></canvas>
+      </div>
+    </section>
+
+    <!-- Management Sections -->
     <section class="card user-management animate-fadein">
-      <h2>จัดการผู้ใช้งาน</h2>
-      <div id="userTable"></div>
-      <button class="btn-primary" id="addUserBtn">เพิ่มผู้ใช้</button>
+      <h2>👥 จัดการพนักงาน</h2>
+      <div class="management-actions">
+        <button class="btn-primary" onclick="showAddUserForm()">➕ เพิ่มพนักงาน</button>
+        <button class="btn-secondary" onclick="showUserList()">📋 รายชื่อทั้งหมด</button>
+        <button class="btn-secondary" onclick="importUsers()">📤 Import CSV</button>
+      </div>
+      <div id="userManagementContent">
+        <!-- Dynamic content -->
+      </div>
     </section>
+
     <section class="card leave-rule-management animate-fadein">
-      <h2>ตั้งค่ากฎการลา</h2>
-      <form id="leaveRulesForm"></form>
+      <h2>📋 ตั้งค่ากฎการลา</h2>
+      <form id="leaveRulesForm">
+        <div class="rules-grid">
+          <div class="rule-section">
+            <h3>⚡ ลากิจ</h3>
+            <label>วันต่อปี</label>
+            <input type="number" id="casualDays" value="7">
+            <label>แจ้งล่วงหน้า (วัน)</label>
+            <input type="number" id="casualAdvance" value="1">
+          </div>
+          <div class="rule-section">
+            <h3>🏥 ลาป่วย</h3>
+            <label>วันต่อปี</label>
+            <input type="number" id="sickDays" value="30">
+            <label>ใบรับรองเมื่อเกิน (วัน)</label>
+            <input type="number" id="sickCertDays" value="3">
+          </div>
+          <div class="rule-section">
+            <h3>🏖️ ลาพักร้อน</h3>
+            <label>วันต่อปี</label>
+            <input type="number" id="vacationDays" value="10">
+            <label>แจ้งล่วงหน้า (วัน)</label>
+            <input type="number" id="vacationAdvance" value="7">
+          </div>
+        </div>
+        <button type="submit" class="btn-primary">💾 บันทึกกฎ</button>
+      </form>
     </section>
+
     <section class="card export-section animate-fadein">
-      <h2>Export รายงาน</h2>
-      <label>ช่วงเวลา</label><input type="date" id="exportStart"> – <input type="date" id="exportEnd">
-      <label>แผนก</label><select id="exportDepartment"></select>
-      <button class="btn-secondary" id="exportExcelBtn">Export Excel</button>
-      <button class="btn-secondary" id="exportPdfBtn">Export PDF</button>
+      <h2>💾 Export รายงาน</h2>
+      <div class="export-controls">
+        <label>📅 ช่วงเวลา</label>
+        <div class="date-range">
+          <input type="date" id="exportStart">
+          <span>ถึง</span>
+          <input type="date" id="exportEnd">
+        </div>
+        <label>🏢 แผนก</label>
+        <select id="exportDepartment">
+          <option value="">ทั้งหมด</option>
+          <option value="IT">IT</option>
+          <option value="HR">HR</option>
+          <option value="Finance">Finance</option>
+          <option value="Marketing">Marketing</option>
+        </select>
+        <div class="export-buttons">
+          <button class="btn-secondary" id="exportExcelBtn">📊 Export Excel</button>
+          <button class="btn-secondary" id="exportPdfBtn">📄 Export PDF</button>
+        </div>
+      </div>
     </section>
-    <section id="notification" class="notification"></section>
+
+    <section id="notification" class="notification" style="display:none;"></section>
   </main>
+  
   <footer class="app-footer">© 2025 Leave Management Pro</footer>
   <script src="script.js"></script>
 </body>
