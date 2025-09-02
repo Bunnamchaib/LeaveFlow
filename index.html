@@ -6,22 +6,34 @@
   <title>Leave Management Pro - Login</title>
   <link rel="manifest" href="manifest.json">
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="loading-animations.css">
 </head>
 <body class="background-gradient">
   <main class="login-container">
     <section class="login-card card animate-fadein">
-      <header><h1>Leave Management Pro</h1></header>
+      <header><h1>🏢 Leave Management Pro</h1></header>
       <form id="loginForm">
         <label for="employeeId">รหัสพนักงาน</label>
         <input type="text" id="employeeId" name="employeeId" required autofocus placeholder="Employee ID">
         <label for="password">รหัสผ่าน</label>
         <input type="password" id="password" name="password" required placeholder="Password">
-        <button type="submit" class="btn-primary">เข้าสู่ระบบ</button>
+        <button type="submit" id="loginBtn" class="btn-primary">เข้าสู่ระบบ</button>
       </form>
       <div id="loginError" class="alert-error" style="display:none;"></div>
     </section>
     <footer class="app-footer">© 2025 Leave Management Pro</footer>
   </main>
+  
+  <!-- Loading Overlay -->
+  <div id="globalLoading" class="loading-overlay" style="display:none;">
+    <div class="particles" id="particles"></div>
+    <div class="logo-pulse">🏢</div>
+    <div class="loading-progress">
+      <div class="loading-progress-bar"></div>
+    </div>
+    <div class="loading-text">กำลังเข้าสู่ระบบ<span class="dots">...</span></div>
+  </div>
+  
   <script src="script.js"></script>
 </body>
 </html>
