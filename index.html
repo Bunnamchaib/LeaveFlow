@@ -4,36 +4,403 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Leave Management Pro - Login</title>
-  <link rel="manifest" href="manifest.json">
-  <link rel="stylesheet" href="style.css">
-  <link rel="stylesheet" href="loading-animations.css">
+  <style>
+    /* Emergency Inline CSS - รวมทุกอย่าง */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    body {
+      font-family: 'Inter', 'Prompt', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .login-container {
+      background: white;
+      padding: 3rem 2rem;
+      border-radius: 20px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+      max-width: 400px;
+      width: 90%;
+      text-align: center;
+      animation: slideUp 0.6s ease-out;
+    }
+    
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    h1 {
+      font-size: 2.2rem;
+      color: #4f8cff;
+      margin-bottom: 2rem;
+      font-weight: 800;
+    }
+    
+    .form-group {
+      margin-bottom: 1.5rem;
+      text-align: left;
+    }
+    
+    label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: #333;
+      font-size: 0.95rem;
+    }
+    
+    input {
+      width: 100%;
+      padding: 1rem 1.2rem;
+      font-size: 1rem;
+      border: 2px solid #e8ecf0;
+      border-radius: 12px;
+      transition: all 0.2s;
+      background: #f8f9fa;
+      font-family: inherit;
+    }
+    
+    input:focus {
+      outline: none;
+      border-color: #4f8cff;
+      background: #e9eeff;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(79, 140, 255, 0.2);
+    }
+    
+    .btn-login {
+      width: 100%;
+      padding: 1rem;
+      font-size: 1.1rem;
+      font-weight: 600;
+      background: linear-gradient(45deg, #4f8cff, #38e6c0);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.3s;
+      box-shadow: 0 4px 15px rgba(79, 140, 255, 0.3);
+      margin-top: 1rem;
+      font-family: inherit;
+    }
+    
+    .btn-login:hover:not(:disabled) {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(79, 140, 255, 0.4);
+    }
+    
+    .btn-login:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+    }
+    
+    .error {
+      background: #e74c3c;
+      color: white;
+      padding: 1rem;
+      border-radius: 8px;
+      margin-top: 1rem;
+      display: none;
+      text-align: left;
+    }
+    
+    .footer {
+      margin-top: 2rem;
+      color: #666;
+      font-size: 0.9rem;
+    }
+    
+    /* Demo Credentials Box */
+    .demo-creds {
+      background: #e8f4f8;
+      padding: 1rem;
+      border-radius: 8px;
+      margin-top: 1.5rem;
+      font-size: 0.9rem;
+      text-align: left;
+    }
+    
+    .demo-creds h4 {
+      color: #4f8cff;
+      margin-bottom: 0.5rem;
+    }
+    
+    .demo-creds p {
+      margin: 0.3rem 0;
+      font-family: monospace;
+    }
+    
+    /* Loading Animation */
+    .loading-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      color: white;
+    }
+    
+    .loading-content {
+      text-align: center;
+    }
+    
+    .logo-pulse {
+      width: 100px;
+      height: 100px;
+      background: linear-gradient(45deg, #4f8cff, #38e6c0);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      margin: 0 auto 2rem;
+      animation: pulse 2s infinite;
+    }
+    
+    @keyframes pulse {
+      0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(79, 140, 255, 0.7); }
+      70% { transform: scale(1.1); box-shadow: 0 0 0 10px rgba(79, 140, 255, 0); }
+      100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(79, 140, 255, 0); }
+    }
+    
+    .loading-text {
+      font-size: 1.2rem;
+      margin-top: 1rem;
+    }
+    
+    .progress-bar {
+      width: 200px;
+      height: 4px;
+      background: rgba(255,255,255,0.3);
+      border-radius: 2px;
+      overflow: hidden;
+      margin: 1rem auto;
+    }
+    
+    .progress {
+      height: 100%;
+      background: linear-gradient(90deg, #4f8cff, #38e6c0);
+      animation: loading 2s infinite;
+    }
+    
+    @keyframes loading {
+      0% { width: 0%; }
+      50% { width: 80%; }
+      100% { width: 100%; }
+    }
+
+    /* Responsive */
+    @media (max-width: 480px) {
+      .login-container {
+        padding: 2rem 1.5rem;
+        margin: 1rem;
+      }
+      
+      h1 {
+        font-size: 1.8rem;
+      }
+    }
+  </style>
 </head>
-<body class="background-gradient">
-  <main class="login-container">
-    <section class="login-card card animate-fadein">
-      <header><h1>🏢 Leave Management Pro</h1></header>
-      <form id="loginForm">
+<body>
+  <div class="login-container">
+    <h1>🏢 Leave Management Pro</h1>
+    
+    <form id="loginForm">
+      <div class="form-group">
         <label for="employeeId">รหัสพนักงาน</label>
-        <input type="text" id="employeeId" name="employeeId" required autofocus placeholder="Employee ID">
+        <input type="text" id="employeeId" placeholder="Employee ID" required autofocus>
+      </div>
+      
+      <div class="form-group">
         <label for="password">รหัสผ่าน</label>
-        <input type="password" id="password" name="password" required placeholder="Password">
-        <button type="submit" id="loginBtn" class="btn-primary">เข้าสู่ระบบ</button>
-      </form>
-      <div id="loginError" class="alert-error" style="display:none;"></div>
-    </section>
-    <footer class="app-footer">© 2025 Leave Management Pro</footer>
-  </main>
-  
-  <!-- Loading Overlay -->
-  <div id="globalLoading" class="loading-overlay" style="display:none;">
-    <div class="particles" id="particles"></div>
-    <div class="logo-pulse">🏢</div>
-    <div class="loading-progress">
-      <div class="loading-progress-bar"></div>
+        <input type="password" id="password" placeholder="Password" required>
+      </div>
+      
+      <button type="submit" id="loginBtn" class="btn-login">เข้าสู่ระบบ</button>
+    </form>
+    
+    <div id="loginError" class="error"></div>
+    
+    <!-- Demo Credentials -->
+    <div class="demo-creds">
+      <h4>🔑 ทดสอบระบบ:</h4>
+      <p><strong>พนักงาน:</strong> EMP001 / password123</p>
+      <p><strong>หัวหน้า:</strong> EMP002 / password456</p>
+      <p><strong>แอดมิน:</strong> EMP003 / admin789</p>
     </div>
-    <div class="loading-text">กำลังเข้าสู่ระบบ<span class="dots">...</span></div>
+    
+    <div class="footer">© 2025 Leave Management Pro</div>
   </div>
   
-  <script src="script.js"></script>
+  <!-- Loading Overlay -->
+  <div id="loadingOverlay" class="loading-overlay">
+    <div class="loading-content">
+      <div class="logo-pulse">🏢</div>
+      <div class="progress-bar">
+        <div class="progress"></div>
+      </div>
+      <div class="loading-text">กำลังเข้าสู่ระบบ...</div>
+    </div>
+  </div>
+
+  <script>
+    // Emergency Inline JavaScript
+    document.addEventListener('DOMContentLoaded', function() {
+      const loginForm = document.getElementById('loginForm');
+      const employeeIdInput = document.getElementById('employeeId');
+      const passwordInput = document.getElementById('password');
+      const loginBtn = document.getElementById('loginBtn');
+      const errorDiv = document.getElementById('loginError');
+      const loadingOverlay = document.getElementById('loadingOverlay');
+      
+      // Auto-focus first input
+      employeeIdInput.focus();
+      
+      // Login form submit
+      loginForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        const employeeId = employeeIdInput.value.trim();
+        const password = passwordInput.value;
+        
+        // Clear previous errors
+        errorDiv.style.display = 'none';
+        
+        // Validation
+        if (!employeeId || !password) {
+          showError('กรุณาใส่รหัสพนักงานและรหัสผ่าน');
+          return;
+        }
+        
+        // Show loading
+        showLoading();
+        loginBtn.disabled = true;
+        
+        try {
+          // Simulate API delay
+          await delay(2000);
+          
+          // Demo credentials
+          const validCredentials = {
+            'EMP001': { password: 'password123', name: 'นายสมชาย ใจดี', role: 'staff', dept: 'IT' },
+            'EMP002': { password: 'password456', name: 'นางสาวสุดา สวยงาม', role: 'head', dept: 'HR' },
+            'EMP003': { password: 'admin789', name: 'นายอดมิน ระบบ', role: 'admin', dept: 'IT' }
+          };
+          
+          if (validCredentials[employeeId] && validCredentials[employeeId].password === password) {
+            const user = validCredentials[employeeId];
+            
+            // Store user data
+            const userData = {
+              employeeId: employeeId,
+              fullName: user.name,
+              role: user.role,
+              department: user.dept,
+              loginTime: new Date().toISOString()
+            };
+            
+            localStorage.setItem('user', JSON.stringify(userData));
+            
+            // Show success
+            updateLoadingText('✅ เข้าสู่ระบบสำเร็จ!');
+            await delay(1000);
+            
+            // Redirect based on role
+            if (user.role === 'admin') {
+              window.location.href = 'admin.html';
+            } else {
+              window.location.href = 'dashboard.html';
+            }
+            
+          } else {
+            throw new Error('รหัสพนักงานหรือรหัสผ่านไม่ถูกต้อง');
+          }
+          
+        } catch (error) {
+          hideLoading();
+          showError(error.message);
+          loginBtn.disabled = false;
+        }
+      });
+      
+      // Helper functions
+      function showLoading() {
+        loadingOverlay.style.display = 'flex';
+      }
+      
+      function hideLoading() {
+        loadingOverlay.style.display = 'none';
+      }
+      
+      function updateLoadingText(text) {
+        const loadingText = document.querySelector('.loading-text');
+        if (loadingText) {
+          loadingText.textContent = text;
+        }
+      }
+      
+      function showError(message) {
+        errorDiv.textContent = message;
+        errorDiv.style.display = 'block';
+        
+        // Shake animation
+        errorDiv.style.animation = 'none';
+        errorDiv.offsetHeight; // Trigger reflow
+        errorDiv.style.animation = 'shake 0.5s ease-in-out';
+      }
+      
+      function delay(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+      }
+      
+      // Quick fill buttons (for testing)
+      document.addEventListener('keydown', function(e) {
+        if (e.ctrlKey || e.metaKey) {
+          switch(e.key) {
+            case '1':
+              e.preventDefault();
+              employeeIdInput.value = 'EMP001';
+              passwordInput.value = 'password123';
+              break;
+            case '2':
+              e.preventDefault();
+              employeeIdInput.value = 'EMP002';
+              passwordInput.value = 'password456';
+              break;
+            case '3':
+              e.preventDefault();
+              employeeIdInput.value = 'EMP003';
+              passwordInput.value = 'admin789';
+              break;
+          }
+        }
+      });
+    });
+    
+    // Add shake animation
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes shake {
+        0%, 100% { transform: translateX(0); }
+        25% { transform: translateX(-5px); }
+        75% { transform: translateX(5px); }
+      }
+    `;
+    document.head.appendChild(style);
+  </script>
 </body>
 </html>
