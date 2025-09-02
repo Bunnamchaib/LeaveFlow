@@ -4,8 +4,270 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ขอลา - Leave Management Pro</title>
-  <link rel="stylesheet" href="style.css">
-  <link rel="stylesheet" href="loading-animations.css">
+  <style>
+    :root {
+      --primary: #4f8cff;
+      --secondary: #f5f7fa;
+      --accent: #38e6c0;
+      --danger: #e05a5a;
+      --success: #3bceac;
+      --warning: #ffd36a;
+      --text: #212a35;
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --shadow: 0 2px 16px 0 rgba(41,61,101,0.08);
+      --radius: 18px;
+    }
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    body {
+      font-family: 'Inter', 'Prompt', -apple-system, BlinkMacSystemFont, sans-serif;
+      color: var(--text);
+      background: var(--bg);
+      line-height: 1.6;
+    }
+    
+    .navbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 3vw;
+      background: var(--primary);
+      color: #fff;
+      box-shadow: var(--shadow);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    
+    .logo {
+      font-weight: bold;
+      font-size: 1.4rem;
+    }
+    
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+    }
+    
+    .nav-links a {
+      color: #fff;
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.2s;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+    }
+    
+    .nav-links a:hover {
+      color: var(--accent);
+      background: rgba(255,255,255,0.1);
+    }
+    
+    .main-content {
+      max-width: 1200px;
+      margin: 2rem auto 0;
+      padding: 0 2rem;
+    }
+    
+    .card {
+      background: var(--card);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 2rem;
+      margin-bottom: 1.5rem;
+      transition: box-shadow 0.2s;
+    }
+    
+    .animate-fadein {
+      animation: fadeIn 0.6s ease-out;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+    
+    label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: var(--text);
+      font-size: 0.95rem;
+    }
+    
+    input, select, textarea {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      font-size: 1rem;
+      border: 2px solid var(--secondary);
+      border-radius: 12px;
+      background: var(--secondary);
+      transition: all 0.2s;
+      font-family: inherit;
+    }
+    
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+      background: #e9eeff;
+      transform: translateY(-1px);
+    }
+    
+    .date-section {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+    
+    .duration-info {
+      text-align: center;
+      padding: 1rem;
+      background: var(--secondary);
+      border-radius: 8px;
+      font-weight: 600;
+      color: var(--primary);
+      margin-bottom: 1rem;
+    }
+    
+    .warning-message {
+      background: var(--warning);
+      color: #8b4513;
+      padding: 1rem;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+      font-weight: 500;
+      display: none;
+    }
+    
+    .form-actions {
+      display: flex;
+      gap: 1rem;
+      justify-content: flex-end;
+      margin-top: 2rem;
+    }
+    
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: inherit;
+    }
+    
+    .btn-primary:hover:not(:disabled) {
+      background: #3b66c6;
+      transform: translateY(-2px);
+    }
+    
+    .btn-primary:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+    }
+    
+    .btn-secondary {
+      background: var(--secondary);
+      color: var(--text);
+      border: 2px solid var(--secondary);
+      padding: 0.75rem 1.5rem;
+      border-radius: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: inherit;
+      text-decoration: none;
+      display: inline-block;
+      text-align: center;
+    }
+    
+    .btn-secondary:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+    
+    .recent-request-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem;
+      border-bottom: 1px solid #f0f0f0;
+    }
+    
+    .recent-request-item:last-child {
+      border-bottom: none;
+    }
+    
+    .request-info {
+      flex-grow: 1;
+    }
+    
+    .request-type {
+      font-weight: 600;
+      margin-bottom: 0.3rem;
+    }
+    
+    .request-date {
+      color: #666;
+      font-size: 0.9rem;
+    }
+    
+    .request-status {
+      padding: 0.3rem 0.8rem;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      font-weight: 500;
+    }
+    
+    .status-pending {
+      background: #fff3cd;
+      color: #856404;
+    }
+    
+    .status-approved {
+      background: #d4edda;
+      color: #155724;
+    }
+    
+    .status-waiting {
+      background: #ffeaa7;
+      color: #e17055;
+    }
+    
+    .app-footer {
+      margin-top: 2rem;
+      padding: 0.8rem;
+      text-align: center;
+      color: #94b0c7;
+      font-size: 0.9rem;
+    }
+    
+    @media (max-width: 768px) {
+      .main-content {
+        padding: 0 1rem;
+      }
+      
+      .date-section {
+        grid-template-columns: 1fr;
+      }
+      
+      .form-actions {
+        flex-direction: column;
+      }
+    }
+  </style>
 </head>
 <body>
   <header class="navbar">
@@ -20,63 +282,247 @@
     <section class="card request-leave-form animate-fadein">
       <h2>📝 แบบฟอร์มขอลา</h2>
       <form id="leaveRequestForm">
-        <label>📋 ประเภทการลา</label>
-        <select id="leaveType" required>
-          <option value="">เลือกประเภทการลา</option>
-          <option value="LT001">⚡ ลากิจ (6/7 วันคงเหลือ)</option>
-          <option value="LT002">🏥 ลาป่วย (27/30 วันคงเหลือ)</option>
-          <option value="LT003">🏖️ ลาพักร้อน (10/10 วันคงเหลือ)</option>
-          <option value="LT005">📄 ลาอื่นๆ (5/5 วันคงเหลือ)</option>
-        </select>
+        <div class="form-group">
+          <label>📋 ประเภทการลา</label>
+          <select id="leaveType" required>
+            <option value="">เลือกประเภทการลา</option>
+            <option value="LT001">⚡ ลากิจ (6/7 วันคงเหลือ)</option>
+            <option value="LT002">🏥 ลาป่วย (27/30 วันคงเหลือ)</option>
+            <option value="LT003">🏖️ ลาพักร้อน (10/10 วันคงเหลือ)</option>
+            <option value="LT005">📄 ลาอื่นๆ (5/5 วันคงเหลือ)</option>
+          </select>
+        </div>
 
         <div class="date-section">
-          <div class="date-input">
+          <div class="form-group">
             <label>📅 วันที่เริ่มลา</label>
             <input type="date" id="startDate" required>
           </div>
-          <div class="date-input">
+          <div class="form-group">
             <label>📅 วันที่สิ้นสุดลา</label>
             <input type="date" id="endDate" required>
           </div>
         </div>
 
-        <div class="duration-info">
-          <span id="durationDisplay">จำนวนวัน: 0 วัน</span>
+        <div class="duration-info" id="durationDisplay">
+          จำนวนวัน: 0 วัน
         </div>
 
-        <label>💬 เหตุผลการลา</label>
-        <textarea id="reason" rows="4" placeholder="กรุณาระบุเหตุผลการลา..." required></textarea>
+        <div class="form-group">
+          <label>💬 เหตุผลการลา</label>
+          <textarea id="reason" rows="4" placeholder="กรุณาระบุเหตุผลการลา..." required></textarea>
+        </div>
 
-        <div id="attachmentSection" style="display:none;">
+        <div id="attachmentSection" class="form-group" style="display:none;">
           <label>📎 แนบเอกสาร (ใบรับรองแพทย์)</label>
           <input type="file" id="attachment" accept=".pdf,.jpg,.jpeg,.png">
-          <small>รองรับไฟล์: PDF, JPG, PNG (ขนาดไม่เกิน 10MB)</small>
+          <small style="color: #666; display: block; margin-top: 0.5rem;">
+            รองรับไฟล์: PDF, JPG, PNG (ขนาดไม่เกิน 10MB)
+          </small>
         </div>
 
-        <div id="warningMessage" class="warning-message" style="display:none;">
+        <div id="warningMessage" class="warning-message">
           <!-- ข้อความเตือนจะแสดงที่นี่ -->
         </div>
 
         <div class="form-actions">
-          <button type="button" onclick="window.location.href='dashboard.html'" class="btn-secondary">
-            ยกเลิก
-          </button>
-          <button type="submit" id="submitBtn" class="btn-primary">
-            ส่งคำขอ
-          </button>
+          <a href="dashboard.html" class="btn-secondary">ยกเลิก</a>
+          <button type="submit" id="submitBtn" class="btn-primary">ส่งคำขอ</button>
         </div>
       </form>
     </section>
 
-    <!-- Leave History -->
     <section class="card leave-history animate-fadein">
       <h2>📋 คำขอลาล่าสุด</h2>
       <div id="recentRequests">
-        <!-- จะถูกสร้างด้วย JavaScript -->
+        <div class="recent-request-item">
+          <div class="request-info">
+            <div class="request-type">🏖️ ลาพักร้อน</div>
+            <div class="request-date">15-19 ก.ย. 2025 (5 วัน)</div>
+          </div>
+          <div class="request-status status-pending">⏳ รอพิจารณา</div>
+        </div>
+        <div class="recent-request-item">
+          <div class="request-info">
+            <div class="request-type">🏥 ลาป่วย</div>
+            <div class="request-date">28-30 ส.ค. 2025 (3 วัน)</div>
+          </div>
+          <div class="request-status status-waiting">📋 รอใบรับรอง</div>
+        </div>
+        <div class="recent-request-item">
+          <div class="request-info">
+            <div class="request-type">⚡ ลากิจ</div>
+            <div class="request-date">1 ก.ย. 2025 (1 วัน)</div>
+          </div>
+          <div class="request-status status-approved">✅ อนุมัติ</div>
+        </div>
       </div>
     </section>
   </main>
   
-  <script src="script.js"></script>
+  <footer class="app-footer">© 2025 Leave Management Pro</footer>
+
+  <script>
+    const API_URL = "https://script.google.com/macros/s/AKfycbxz9UL0xVL3rPE5cxQqoa8_85s0ulmNY_UPJSQZgMgWXCVuO3Zg-0me-bWBmELxb3hW/exec";
+
+    document.addEventListener('DOMContentLoaded', function() {
+      const user = JSON.parse(localStorage.getItem('user') || '{}');
+      
+      if (!user.employeeId) {
+        window.location.href = 'index.html';
+        return;
+      }
+
+      const logoutBtn = document.getElementById('navLogout');
+      if (logoutBtn) {
+        logoutBtn.addEventListener('click', logout);
+      }
+
+      // Event listeners
+      const form = document.getElementById('leaveRequestForm');
+      form.addEventListener('submit', handleLeaveSubmit);
+
+      const startDate = document.getElementById('startDate');
+      const endDate = document.getElementById('endDate');
+      const leaveType = document.getElementById('leaveType');
+      
+      startDate.addEventListener('change', calculateLeaveDays);
+      endDate.addEventListener('change', calculateLeaveDays);
+      leaveType.addEventListener('change', showLeaveWarnings);
+
+      // Set min date to today
+      const today = new Date().toISOString().split('T')[0];
+      startDate.min = today;
+      endDate.min = today;
+    });
+
+    function calculateLeaveDays() {
+      const startDate = document.getElementById('startDate').value;
+      const endDate = document.getElementById('endDate').value;
+      const display = document.getElementById('durationDisplay');
+      
+      if (startDate && endDate) {
+        const start = new Date(startDate);
+        const end = new Date(endDate);
+        
+        if (end >= start) {
+          const diffTime = Math.abs(end - start);
+          const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
+          display.textContent = `จำนวนวัน: ${diffDays} วัน`;
+          
+          // Show warnings based on leave type and duration
+          showLeaveWarnings();
+        } else {
+          display.textContent = 'จำนวนวัน: วันที่ไม่ถูกต้อง';
+        }
+      } else {
+        display.textContent = 'จำนวนวัน: 0 วัน';
+      }
+    }
+
+    function showLeaveWarnings() {
+      const leaveType = document.getElementById('leaveType').value;
+      const startDate = document.getElementById('startDate').value;
+      const warningMessage = document.getElementById('warningMessage');
+      const attachmentSection = document.getElementById('attachmentSection');
+      
+      let warning = '';
+      
+      if (startDate && leaveType) {
+        const start = new Date(startDate);
+        const today = new Date();
+        const daysDiff = Math.ceil((start - today) / (1000 * 60 * 60 * 24));
+        
+        switch(leaveType) {
+          case 'LT002': // ลาป่วย
+            const endDate = document.getElementById('endDate').value;
+            if (endDate) {
+              const end = new Date(endDate);
+              const duration = Math.ceil((end - start) / (1000 * 60 * 60 * 24)) + 1;
+              if (duration > 3) {
+                warning = '⚠️ การลาป่วยเกิน 3 วัน จำเป็นต้องแนบใบรับรองแพทย์';
+                attachmentSection.style.display = 'block';
+              } else {
+                attachmentSection.style.display = 'none';
+              }
+            }
+            break;
+            
+          case 'LT003': // ลาพักร้อน
+            if (daysDiff < 7) {
+              warning = '📅 การลาพักร้อนต้องแจ้งล่วงหน้าอย่างน้อย 7 วัน (เหลือ ' + daysDiff + ' วัน)';
+            }
+            attachmentSection.style.display = 'none';
+            break;
+            
+          case 'LT001': // ลากิจ
+            if (daysDiff < 1) {
+              warning = '⏰ การลากิจควรแจ้งล่วงหน้าอย่างน้อย 1 วัน';
+            }
+            attachmentSection.style.display = 'none';
+            break;
+            
+          default:
+            attachmentSection.style.display = 'none';
+            break;
+        }
+      }
+      
+      if (warning) {
+        warningMessage.innerHTML = warning;
+        warningMessage.style.display = 'block';
+      } else {
+        warningMessage.style.display = 'none';
+      }
+    }
+
+    async function handleLeaveSubmit(e) {
+      e.preventDefault();
+      
+      const user = JSON.parse(localStorage.getItem('user') || '{}');
+      const formData = {
+        employeeId: user.employeeId,
+        leaveType: document.getElementById('leaveType').value,
+        startDate: document.getElementById('startDate').value,
+        endDate: document.getElementById('endDate').value,
+        reason: document.getElementById('reason').value
+      };
+      
+      // Validation
+      if (!formData.leaveType || !formData.startDate || !formData.endDate || !formData.reason) {
+        alert('กรุณากรอกข้อมูลให้ครบถ้วน');
+        return;
+      }
+      
+      const submitBtn = document.getElementById('submitBtn');
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'กำลังส่ง...';
+      
+      try {
+        const response = await fetch(`${API_URL}?action=submitLeave&${new URLSearchParams(formData)}`);
+        const result = await response.json();
+        
+        if (result.success) {
+          alert('ส่งคำขอลาสำเร็จ รอการพิจารณาจากหัวหน้า');
+          setTimeout(() => {
+            window.location.href = 'dashboard.html';
+          }, 1000);
+        } else {
+          alert(result.message || 'ไม่สามารถส่งคำขอได้');
+        }
+      } catch (error) {
+        console.error('Submit leave error:', error);
+        alert('เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง');
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'ส่งคำขอ';
+      }
+    }
+
+    function logout() {
+      localStorage.clear();
+      window.location.href = 'index.html';
+    }
+  </script>
 </body>
 </html>
